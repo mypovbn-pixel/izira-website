@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="IZIRA is an independent digital product company building thoughtful platforms, SaaS products and digital ventures." />
-  <meta name="theme-color" content="#111111" />
+  <meta name="description" content="IZIRA is an independent digital product company building thoughtful products and platforms." />
+  <meta name="theme-color" content="#101010" />
   <title>IZIRA — Ideas, thoughtfully built.</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,7 +18,7 @@
   <header class="site-header" id="top">
     <div class="container nav-wrap">
       <a class="brand" href="#top" aria-label="IZIRA home">
-        <img class="izira-logo logo-light" src="assets/izira-logo.svg" alt="IZIRA" />
+        <img class="izira-logo logo-light" src="assets/izira-logo-official.svg" alt="IZIRA" />
       </a>
 
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
@@ -27,10 +27,11 @@
       </button>
 
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
-        <a class="active" href="#top">Home</a>
         <a href="#about">About</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#principles">Principles</a>
+        <a href="#portfolio">Work</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Blog</a>
+        <a href="#contact">Careers</a>
         <a href="#contact">Contact</a>
         <a href="#contact" class="nav-cta">Get in touch</a>
       </nav>
@@ -39,19 +40,34 @@
 
   <main id="main">
     <section class="hero">
+      <div class="hero-shade"></div>
       <div class="container hero-inner">
         <div class="hero-copy reveal">
-          <h1>Building digital<br>businesses with<br><span>purpose and clarity.</span></h1>
-          <p class="hero-lede">We build digital products and platforms that solve real problems, create meaningful experiences, and drive long-term impact.</p>
-          <div class="hero-actions">
-            <a class="button button-amber" href="#portfolio">Explore our work <span>→</span></a>
-            <a class="text-link light-link" href="#about">Learn more about us <span>→</span></a>
-          </div>
+          <p class="eyebrow">Builders. Thinkers. Partners.</p>
+          <h1>We build digital products<br>with purpose and clarity.</h1>
+          <p class="hero-lede">We’re an independent digital product company focused on building software and platforms that make a difference.</p>
+          <a class="text-link light-link" href="#about">Learn more about us <span>→</span></a>
+        </div>
+        <img class="hero-motif" src="assets/izira-motif.svg" alt="" aria-hidden="true" />
+      </div>
+    </section>
+
+    <section class="about section-light" id="about">
+      <div class="container about-grid">
+        <div class="about-copy reveal">
+          <p class="eyebrow">About IZIRA</p>
+          <h2>We are builders, thinkers,<br>and partners.</h2>
+          <p>IZIRA is an independent digital product company focused on building software and platforms that make a difference.</p>
+          <p>We are not tied to one niche. Our portfolio can grow across different audiences, industries and use cases.</p>
+          <a class="text-link" href="#portfolio">Learn more about us <span>→</span></a>
+        </div>
+        <div class="about-motif-wrap reveal" aria-hidden="true">
+          <img src="assets/izira-motif.svg" alt="" />
         </div>
       </div>
     </section>
 
-    <section class="what-we-do section-light">
+    <section class="services section-light" id="services">
       <div class="container">
         <div class="section-intro reveal">
           <div>
@@ -63,37 +79,30 @@
 
         <div class="service-grid">
           <article class="service-card reveal">
-            <img class="service-icon" src="assets/icon-product-building.svg" alt="" />
+            <img src="assets/icon-product-building.svg" class="service-icon" alt="" />
             <h3>Product Building</h3>
             <p>End-to-end product development that turns ideas into scalable, high-impact solutions.</p>
-            <a href="#portfolio">Explore <span>→</span></a>
           </article>
-
           <article class="service-card reveal">
-            <img class="service-icon" src="assets/icon-platform-engineering.svg" alt="" />
+            <img src="assets/icon-platform-engineering.svg" class="service-icon" alt="" />
             <h3>Platform Engineering</h3>
             <p>Robust, secure and future-ready platforms built for performance and growth.</p>
-            <a href="#portfolio">Explore <span>→</span></a>
           </article>
-
           <article class="service-card reveal">
-            <img class="service-icon" src="assets/icon-digital-solutions.svg" alt="" />
+            <img src="assets/icon-digital-solutions.svg" class="service-icon" alt="" />
             <h3>Digital Solutions</h3>
-            <p>Custom solutions that solve real business problems and unlock new opportunities.</p>
-            <a href="#portfolio">Explore <span>→</span></a>
+            <p>Custom solutions that solve real problems and unlock new opportunities.</p>
           </article>
-
           <article class="service-card reveal">
-            <img class="service-icon" src="assets/icon-strategic-partnership.svg" alt="" />
+            <img src="assets/icon-strategic-partnership.svg" class="service-icon" alt="" />
             <h3>Strategic Partnership</h3>
             <p>Long-term partnerships that combine technology, insight and thoughtful execution.</p>
-            <a href="#contact">Explore <span>→</span></a>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="approach" id="principles">
+    <section class="approach">
       <div class="container approach-grid">
         <div class="approach-title reveal">
           <p class="eyebrow">Our approach</p>
@@ -106,65 +115,46 @@
           <article class="step reveal"><span>03</span><h3>Build & Grow</h3><p>We build with quality and partner for long-term growth.</p></article>
         </div>
       </div>
-      <div class="motif-line-bottom" aria-hidden="true"></div>
+      <img class="approach-motif" src="assets/izira-motif.svg" alt="" aria-hidden="true" />
     </section>
 
-    <section class="section-light about" id="about">
-      <div class="container about-grid">
-        <div class="about-copy reveal">
-          <p class="eyebrow">About IZIRA</p>
-          <h2>We are builders, thinkers, and partners.</h2>
-          <p>IZIRA is an independent digital product company focused on building software and platforms that make a difference.</p>
-          <p>We are not tied to one niche. Our portfolio can grow across different audiences, industries and use cases.</p>
-          <a class="text-link" href="#portfolio">Learn more about us <span>→</span></a>
-        </div>
-
-        <div class="about-visual reveal" aria-hidden="true">
-          <div class="visual-grid"></div>
-          <div class="visual-z">Z</div>
-          <div class="visual-accent"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-light portfolio" id="portfolio">
+    <section class="portfolio section-light" id="portfolio">
       <div class="container">
         <div class="portfolio-heading reveal">
           <div>
-            <p class="eyebrow">Our work</p>
-            <h2>Solutions that<br>create real impact.</h2>
+            <p class="eyebrow">Our products</p>
+            <h2>Digital products making a real impact.</h2>
           </div>
-          <p>We build digital products and platforms across industries. Each product is crafted with purpose and built to last.</p>
         </div>
 
         <div class="portfolio-cards">
           <article class="portfolio-card reveal">
-            <div class="portfolio-art art-mypov"><span>01</span></div>
+            <div class="portfolio-preview"><img src="assets/preview-mypov.svg" alt="myPOV preview" /></div>
             <div class="portfolio-content">
               <p class="product-type">Digital wedding experiences</p>
               <h3>myPOV</h3>
               <p>Digital invitations, guestbooks and interactive wedding experiences designed to capture every perspective of the day.</p>
-              <a href="https://mypov.site" target="_blank" rel="noreferrer">View project <span>→</span></a>
+              <span class="status">In development</span>
             </div>
           </article>
 
           <article class="portfolio-card reveal">
-            <div class="portfolio-art art-masjid"><span>02</span></div>
+            <div class="portfolio-preview"><img src="assets/preview-masjid-kitani.svg" alt="Masjid Kitani preview" /></div>
             <div class="portfolio-content">
               <p class="product-type">Community platform</p>
               <h3>Masjid Kitani</h3>
               <p>A free Brunei-focused platform making mosque ceramah schedules easier for the community to discover and follow.</p>
-              <span class="coming-soon">In development</span>
+              <span class="status">In development</span>
             </div>
           </article>
 
           <article class="portfolio-card reveal">
-            <div class="portfolio-art art-future"><span>+</span></div>
+            <div class="portfolio-preview"><img src="assets/preview-kitani-kids.svg" alt="Kitani Kids preview" /></div>
             <div class="portfolio-content">
-              <p class="product-type">Future ventures</p>
-              <h3>What’s next</h3>
-              <p>IZIRA is designed to grow with new ideas, new products and completely different categories.</p>
-              <span class="coming-soon">More to come</span>
+              <p class="product-type">Learning platform</p>
+              <h3>Kitani Kids</h3>
+              <p>Engaging and age-appropriate digital learning experiences for children, built to support curiosity, habits and knowledge.</p>
+              <span class="status">In development</span>
             </div>
           </article>
         </div>
@@ -172,46 +162,38 @@
     </section>
 
     <section class="contact" id="contact">
+      <div class="contact-pattern" aria-hidden="true"></div>
       <div class="container contact-grid">
-        <div class="reveal">
-          <p class="eyebrow">Let’s connect</p>
-          <h2>Have a project<br>in mind?</h2>
-          <p>We’d love to hear about it. Let’s create something meaningful together.</p>
-          <a class="button button-amber" href="mailto:hello@izira.xyz">Get in touch <span>→</span></a>
+        <div>
+          <h2>Have an idea in mind?</h2>
+          <p>Let’s build something meaningful together.</p>
         </div>
-
-        <div class="contact-details reveal">
-          <div class="contact-row">
-            <img src="assets/icon-envelope.svg" alt="" />
-            <div><span>Email</span><a href="mailto:hello@izira.xyz">hello@izira.xyz</a></div>
-          </div>
-          <div class="contact-row">
-            <img src="assets/icon-location.svg" alt="" />
-            <div><span>Based in</span><p>Brunei Darussalam</p></div>
-          </div>
-        </div>
+        <a class="button button-amber" href="mailto:hello@izira.xyz">Get in touch <span>→</span></a>
       </div>
-      <div class="motif-line-bottom" aria-hidden="true"></div>
+      <img class="contact-motif" src="assets/izira-motif.svg" alt="" aria-hidden="true" />
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <img class="izira-logo logo-light" src="assets/izira-logo.svg" alt="IZIRA" />
-        <p>Building digital businesses<br>with purpose and clarity.</p>
-        <div class="footer-socials">
-          <a href="#" aria-label="Instagram"><img src="assets/icon-instagram.svg" alt="" /></a>
-          <a href="#" aria-label="LinkedIn"><img src="assets/icon-linkedin.svg" alt="" /></a>
-        </div>
+        <img class="izira-logo logo-light" src="assets/izira-logo-official.svg" alt="IZIRA" />
+        <p>We build digital products<br>that create real impact.</p>
       </div>
 
       <div class="footer-links">
         <span>Company</span>
-        <a href="#about">About Us</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#principles">Principles</a>
+        <a href="#about">About</a>
+        <a href="#contact">Careers</a>
+        <a href="#contact">Blog</a>
         <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer-links">
+        <span>Work</span>
+        <a href="#portfolio">Our Projects</a>
+        <a href="#services">Services</a>
+        <a href="#about">Process</a>
       </div>
 
       <div class="footer-links">
@@ -220,10 +202,19 @@
         <a href="#">Terms of Use</a>
       </div>
 
-      <div class="footer-meta">
-        <p>© <span id="year"></span> IZIRA. All rights reserved.</p>
-        <p>Brunei Darussalam</p>
+      <div class="footer-connect">
+        <span>Connect</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn"><img src="assets/icon-linkedin.svg" alt="" /></a>
+          <a href="#" aria-label="Instagram"><img src="assets/icon-instagram.svg" alt="" /></a>
+          <a href="mailto:hello@izira.xyz" aria-label="Email"><img src="assets/icon-envelope.svg" alt="" /></a>
+        </div>
       </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© <span id="year"></span> IZIRA. All rights reserved.</p>
+      <img src="assets/izira-motif.svg" alt="" aria-hidden="true" />
     </div>
   </footer>
 
