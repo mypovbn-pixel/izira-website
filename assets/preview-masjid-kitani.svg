@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7d6756"/><stop offset="1" stop-color="#1e1b19"/></linearGradient>
+  </defs>
+  <rect width="900" height="520" fill="url(#sky)"/>
+  <path d="M95 345h110v-95h20v-55h20v55h22v95h95V285h35v-58h24v58h36v60h84v-120h28v-60h24v60h27v120h120v175H95z" fill="#151515" opacity=".92"/>
+  <path d="M180 245c0-50 48-83 95-83s95 33 95 83" fill="#191919"/>
+  <path d="M515 210c0-42 42-72 82-72s82 30 82 72" fill="#191919"/>
+  <rect x="300" y="115" width="410" height="300" rx="18" fill="#151515" stroke="#7b6c61" stroke-width="4"/>
+  <rect x="325" y="140" width="360" height="250" rx="12" fill="#1e1e1e"/>
+  <text x="350" y="175" fill="#f2efe9" font-size="18" font-family="Arial">Assalamualaikum,</text>
+  <text x="350" y="205" fill="#f2efe9" font-size="24" font-weight="700" font-family="Arial">Welcome back</text>
+  <rect x="348" y="242" width="310" height="95" rx="12" fill="#f2eee7"/>
+  <text x="370" y="272" fill="#171717" font-size="14" font-family="Arial">Upcoming Events</text>
+  <text x="370" y="305" fill="#171717" font-size="18" font-weight="700" font-family="Arial">Kuliah Maghrib</text>
+  <text x="370" y="328" fill="#777" font-size="12" font-family="Arial">Masjid • Bandar</text>
+  <path d="M270 42H590L548 84H835" stroke="#C56A2D" stroke-width="3" fill="none"/>
+</svg>
