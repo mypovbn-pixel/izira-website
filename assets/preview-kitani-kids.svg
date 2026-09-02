@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9d7c9"/><stop offset="1" stop-color="#84765d"/></linearGradient>
+  </defs>
+  <rect width="900" height="520" fill="url(#bg)"/>
+  <circle cx="780" cy="105" r="75" fill="#9ca27d" opacity=".65"/>
+  <circle cx="110" cy="410" r="90" fill="#b2aa83" opacity=".45"/>
+  <rect x="230" y="90" width="500" height="330" rx="20" fill="#171717" stroke="#262626" stroke-width="4"/>
+  <rect x="252" y="112" width="456" height="286" rx="12" fill="#f6f1e6"/>
+  <text x="285" y="162" fill="#4a5c45" font-size="18" font-family="Arial">Kitani Kids</text>
+  <text x="285" y="225" fill="#30412f" font-size="40" font-weight="700" font-family="Arial">Let’s learn</text>
+  <text x="285" y="270" fill="#30412f" font-size="40" font-weight="700" font-family="Arial">and grow</text>
+  <text x="285" y="315" fill="#30412f" font-size="40" font-weight="700" font-family="Arial">together</text>
+  <rect x="285" y="340" width="130" height="34" rx="17" fill="#759b6b"/>
+  <text x="350" y="362" text-anchor="middle" fill="white" font-size="13" font-family="Arial">Explore Learning</text>
+  <circle cx="560" cy="296" r="42" fill="#e1a476"/>
+  <circle cx="625" cy="300" r="42" fill="#d99866"/>
+  <circle cx="660" cy="350" r="46" fill="#e0a875"/>
+  <rect x="535" y="334" width="52" height="70" rx="20" fill="#ce6f4a"/>
+  <rect x="600" y="338" width="52" height="66" rx="20" fill="#6aa4a1"/>
+  <rect x="635" y="390" width="55" height="15" rx="7" fill="#e0a875"/>
+  <path d="M175 445H420L382 482H835" stroke="#C56A2D" stroke-width="3" fill="none"/>
+</svg>
