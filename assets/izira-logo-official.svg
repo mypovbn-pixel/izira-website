@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 160" role="img" aria-label="IZIRA">
+  <g fill="#171717">
+    <rect x="18" y="24" width="8" height="112"/>
+    <path d="M85 26H166L97 126H166V136H78L148 36H85Z"/>
+    <path d="M85 26H170L162 38H85Z"/>
+    <rect x="210" y="24" width="8" height="112"/>
+    <path d="M270 24H322C357 24 379 42 379 70C379 91 367 106 347 113L383 136H365L334 116H278V136H270ZM278 34V106H321C353 106 369 94 369 70C369 46 353 34 321 34Z"/>
+    <path d="M418 136L465 24H479L526 136H514L501 105H443L430 136ZM448 95H496L472 38Z"/>
+  </g>
+</svg>
