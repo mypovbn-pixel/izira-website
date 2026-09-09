@@ -2,7 +2,7 @@ create extension if not exists pgcrypto;
 
 create table public.businesses (
   id uuid primary key default gen_random_uuid(),
-  owner_id uuid not null references auth.users(id) on delete cascade,
+  owner_id uuid references auth.users(id) on delete cascade,
   name text not null,
   slug text not null unique check (slug ~ '^[a-z0-9][a-z0-9-]{2,40}$'),
   description text,
@@ -59,6 +59,14 @@ create table public.payment_receipts (
   uploaded_at timestamptz not null default now()
 );
 
+create index businesses_owner_id_idx on public.businesses(owner_id);
+create index products_business_id_idx on public.products(business_id);
+create index orders_business_id_idx on public.orders(business_id);
+create index order_items_order_id_idx on public.order_items(order_id);
+create index order_items_product_id_idx on public.order_items(product_id);
+create index payment_receipts_business_id_idx on public.payment_receipts(business_id);
+create index payment_receipts_order_id_idx on public.payment_receipts(order_id);
+
 alter table public.businesses enable row level security;
 alter table public.products enable row level security;
 alter table public.orders enable row level security;
@@ -66,13 +74,20 @@ alter table public.order_items enable row level security;
 alter table public.payment_receipts enable row level security;
 
 create policy "public can view active businesses" on public.businesses for select to anon, authenticated using (is_active);
-create policy "owners manage businesses" on public.businesses for all to authenticated using ((select auth.uid())=owner_id) with check ((select auth.uid())=owner_id);
+create policy "owners insert businesses" on public.businesses for insert to authenticated with check ((select auth.uid())=owner_id);
+create policy "owners update businesses" on public.businesses for update to authenticated using ((select auth.uid())=owner_id) with check ((select auth.uid())=owner_id);
+create policy "owners delete businesses" on public.businesses for delete to authenticated using ((select auth.uid())=owner_id);
+
 create policy "public can view active products" on public.products for select to anon, authenticated using (is_active and exists(select 1 from public.businesses b where b.id=business_id and b.is_active));
-create policy "owners manage products" on public.products for all to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid()))) with check (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
+create policy "owners insert products" on public.products for insert to authenticated with check (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
+create policy "owners update products" on public.products for update to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid()))) with check (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
+create policy "owners delete products" on public.products for delete to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
+
 create policy "owners read orders" on public.orders for select to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
 create policy "owners update orders" on public.orders for update to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid()))) with check (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
 create policy "owners read order items" on public.order_items for select to authenticated using (exists(select 1 from public.orders o join public.businesses b on b.id=o.business_id where o.id=order_id and b.owner_id=(select auth.uid())));
 create policy "owners read receipts" on public.payment_receipts for select to authenticated using (exists(select 1 from public.businesses b where b.id=business_id and b.owner_id=(select auth.uid())));
 
--- Public checkout should go through a validated server route using the secret key.
--- Do not grant anonymous direct INSERT access to orders or order_items.
+-- owner_id is nullable only so platform-owned/demo stores can exist before seller signup.
+-- User-created stores must insert owner_id = auth.uid() and are protected by RLS.
+-- Public checkout must use the validated create-order Edge Function; anonymous direct INSERT is not granted.
