@@ -32,6 +32,10 @@ export const transportWhatsApp={
  quote:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your fare from ${x.pickup} to ${x.destination} with ${x.businessName} is ${formatBND(x.total||0)}. Reply here to confirm.`,
  reminder:(x:TransportTemplateInput)=>`Hi ${x.customerName} 👋 Reminder for your ${x.kind==="runner"?"runner job":"trip"} with ${x.businessName}. Pickup: ${x.pickup}. Destination: ${x.destination}. Time: ${formatWhen(x.startsAt)}.`,
  recurringConfirmed:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your recurring transport with ${x.businessName} is confirmed.${x.occurrences?` ${x.occurrences} scheduled trips.`:""} First pickup: ${formatWhen(x.startsAt)}. Route: ${x.pickup} → ${x.destination}.`,
+ pickedUp:(x:TransportTemplateInput)=>`Hi ${x.customerName} 👋 Pickup confirmed. Your passenger has been picked up by ${x.businessName} and is now on the way to ${x.destination}.`,
+ droppedOff:(x:TransportTemplateInput)=>`Hi ${x.customerName} ✅ Drop-off confirmed. Your passenger has safely arrived at ${x.destination} with ${x.businessName}.`,
+ runnerCollected:(x:TransportTemplateInput)=>`Hi ${x.customerName} 👋 Your item has been collected by ${x.businessName} and is on the way to ${x.destination}.`,
+ runnerDelivered:(x:TransportTemplateInput)=>`Hi ${x.customerName} ✅ Delivery completed. Your item has been delivered to ${x.destination}.`,
 };
 
 export function whatsAppHref(phone:string,message:string){
