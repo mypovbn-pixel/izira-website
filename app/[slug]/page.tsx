@@ -11,21 +11,23 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
 
   const {data:business,error:businessError}=await supabasePublic
     .from("businesses")
-    .select("id,name,slug,description,whatsapp,plan,is_active,bank_name,account_name,account_number,pickup_address,pickup_enabled,delivery_enabled")
+    .select("id,name,slug,description,whatsapp,plan,is_active,bank_name,account_name,account_number,pickup_address,pickup_enabled,delivery_enabled,hide_izira_branding")
     .eq("slug",normalized)
     .eq("is_active",true)
     .single();
 
   if(businessError||!business) notFound();
 
+  const advanced=business.plan!=="free";
   const [{data:products,error:productsError},{data:slots},{data:campaigns}]=await Promise.all([
     supabasePublic.from("products").select("id,name,description,price,stock_limit,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:true}),
-    supabasePublic.from("availability_slots").select("id,slot_date,label,fulfilment,capacity,is_active").eq("business_id",business.id).eq("is_active",true).gte("slot_date",new Date().toISOString().slice(0,10)).order("slot_date",{ascending:true}),
-    supabasePublic.from("preorder_campaigns").select("id,name,closes_at,collection_start,collection_end,order_limit,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:false}).limit(1)
+    advanced?supabasePublic.from("availability_slots").select("id,slot_date,label,fulfilment,capacity,is_active").eq("business_id",business.id).eq("is_active",true).gte("slot_date",new Date().toISOString().slice(0,10)).order("slot_date",{ascending:true}):Promise.resolve({data:[]}),
+    advanced?supabasePublic.from("preorder_campaigns").select("id,name,closes_at,collection_start,collection_end,order_limit,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:false}).limit(1):Promise.resolve({data:[]})
   ]);
 
   if(productsError) throw productsError;
   const campaign=campaigns?.[0]||null;
+  const canHideBranding=["pro","business"].includes(business.plan)&&business.hide_izira_branding;
 
   return <main className="shell">
     <div className="store-head">
@@ -47,6 +49,6 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
       deliveryEnabled={business.delivery_enabled}
       pickupAddress={business.pickup_address}
     />
-    <footer style={{textAlign:"center",padding:"50px 0 20px"}} className="muted">Powered by <b>IZIRA</b></footer>
+    {!canHideBranding&&<footer style={{textAlign:"center",padding:"50px 0 20px"}} className="muted">Powered by <b>IZIRA</b></footer>}
   </main>
 }
