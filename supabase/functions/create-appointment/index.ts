@@ -16,13 +16,14 @@ function bruneiParts(date:Date){
 }
 function timeToMinutes(value:string){const [h,m]=String(value).split(':').map(Number);return h*60+m}
 function clean(value:unknown,max:number){return value==null?null:String(value).trim().slice(0,max)||null}
+function digits(value:unknown){return String(value||'').replace(/\D/g,'')}
 
 Deno.serve(async(req:Request)=>{
   if(req.method==='OPTIONS')return new Response('ok',{headers:corsHeaders})
   if(req.method!=='POST')return json({error:'Method not allowed'},405)
   try{
     const body=await req.json()
-    const {slug,service_id,customer_name,customer_phone,starts_at,note,pickup_location,destination,passenger_count,item_description,trip_direction,return_at,recurrence_type,recurring_until,recurrence_weekdays}=body??{}
+    const {slug,service_id,customer_name,customer_phone,starts_at,note,pickup_location,destination,passenger_count,passenger_name,item_description,trip_direction,return_at,recurrence_type,recurring_until,recurrence_weekdays,whatsapp_updates_opt_in}=body??{}
     if(!slug||!service_id||!customer_name||!customer_phone||!starts_at)return json({error:'Complete the booking details.'},400)
 
     const firstStart=new Date(starts_at)
@@ -138,21 +139,38 @@ Deno.serve(async(req:Request)=>{
       pickup_location:clean(pickup_location,500),
       destination:clean(destination,500),
       passenger_count:kind==='transport'?Number(passenger_count||1):null,
+      passenger_name:kind==='transport'?clean(passenger_name,160):null,
       item_description:kind==='runner'?clean(item_description,1000):null,
       trip_direction:['one_way','return'].includes(trip_direction)?trip_direction:null,
       return_at:returnDate?returnDate.toISOString():null,
       series_id:seriesId,
       recurring_until:requestedRecurring?untilDate:null,
-      recurrence_weekdays:requestedRecurring?weekdays:null
+      recurrence_weekdays:requestedRecurring?weekdays:null,
+      journey_status:['runner','transport'].includes(kind)?'scheduled':null
     }))
 
     const {data:appointments,error:appointmentError}=await supabase.from('appointments').insert(rows)
-      .select('id,customer_name,customer_phone,starts_at,ends_at,total,payment_status,appointment_status,booking_kind,pickup_location,destination,passenger_count,item_description,trip_direction,return_at,series_id,recurring_until,recurrence_weekdays')
+      .select('id,customer_name,customer_phone,starts_at,ends_at,total,payment_status,appointment_status,booking_kind,pickup_location,destination,passenger_count,passenger_name,item_description,trip_direction,return_at,series_id,recurring_until,recurrence_weekdays,journey_status')
     if(appointmentError||!appointments?.length)throw appointmentError||new Error('Booking creation failed')
+
+    if(whatsapp_updates_opt_in===true){
+      const normalized=digits(customer_phone)
+      if(normalized){
+        await supabase.from('whatsapp_opt_ins').upsert({
+          business_id:business.id,
+          customer_phone:normalized,
+          purpose:'transactional',
+          source:['runner','transport'].includes(kind)?'transport_booking':'service_booking',
+          opted_in_at:new Date().toISOString(),
+          revoked_at:null
+        },{onConflict:'business_id,customer_phone,purpose'})
+      }
+    }
 
     return json({
       appointment:appointments[0],appointments,
       occurrence_count:appointments.length,
+      whatsapp_updates_opt_in:whatsapp_updates_opt_in===true,
       service:{id:service.id,name:service.name,duration_minutes:service.duration_minutes,price,deposit_amount:deposit,service_kind:kind,pricing_mode:service.pricing_mode},
       business:{name:business.name,whatsapp:business.whatsapp},
       payment:{bank_name:business.bank_name,account_name:business.account_name,account_number:business.account_number,deposit_amount:deposit}
