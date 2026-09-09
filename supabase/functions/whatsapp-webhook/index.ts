@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}})
+const digits=(value:unknown)=>String(value||'').replace(/\D/g,'')
 
 async function verifySignature(raw:string,signatureHeader:string|null,secret:string){
   if(!signatureHeader?.startsWith('sha256='))return false
@@ -70,16 +71,22 @@ Deno.serve(async(req:Request)=>{
             if(messageType==='text')body=message?.text?.body||null
             else if(messageType==='button')body=message?.button?.text||null
             else if(messageType==='interactive')body=message?.interactive?.button_reply?.title||message?.interactive?.list_reply?.title||null
+            const sender=digits(message?.from||'')
             await supabase.from('whatsapp_inbound_messages').upsert({
               business_id:connection.business_id,
               connection_id:connection.id,
               meta_message_id:metaId,
-              sender:String(message?.from||''),
+              sender,
               message_type:messageType,
               body,
               payload:message,
               received_at:message?.timestamp?new Date(Number(message.timestamp)*1000).toISOString():new Date().toISOString()
             },{onConflict:'meta_message_id'})
+
+            const normalized=String(body||'').trim().toLowerCase().replace(/\s+/g,' ')
+            if(['stop','unsubscribe','opt out','berhenti'].includes(normalized)&&sender){
+              await supabase.from('whatsapp_opt_ins').update({revoked_at:new Date().toISOString()}).eq('business_id',connection.business_id).eq('customer_phone',sender).is('revoked_at',null)
+            }
           }
         }
       }
