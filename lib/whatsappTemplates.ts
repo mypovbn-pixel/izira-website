@@ -1,5 +1,6 @@
 export type OrderTemplateInput={businessName:string;customerName:string;orderNumber:number|string;total?:number;collectionText?:string};
 export type AppointmentTemplateInput={businessName:string;customerName:string;serviceName?:string;startsAt:string|Date;total?:number;deposit?:number|null};
+export type TransportTemplateInput={businessName:string;customerName:string;serviceName?:string;startsAt:string|Date;pickup:string;destination:string;total?:number;occurrences?:number;kind?:"runner"|"transport"};
 
 export function formatBND(value:number){return `BND ${Number(value).toFixed(2)}`}
 export function formatWhen(value:string|Date){return new Date(value).toLocaleString([], {dateStyle:"medium",timeStyle:"short"})}
@@ -23,6 +24,14 @@ export const appointmentWhatsApp={
  rescheduleRequest:(x:AppointmentTemplateInput)=>`Hi ${x.businessName}, I’d like to request a different time for my appointment${x.serviceName?` for ${x.serviceName}`:""}, currently on ${formatWhen(x.startsAt)}.`,
  cancelled:(x:AppointmentTemplateInput)=>`Hi ${x.customerName}, your appointment with ${x.businessName} on ${formatWhen(x.startsAt)} has been cancelled. Please contact us if you’d like to book another time.`,
  thankYou:(x:AppointmentTemplateInput)=>`Thank you for booking with ${x.businessName}, ${x.customerName}! We hope to see you again soon.`,
+};
+
+export const transportWhatsApp={
+ requested:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your ${x.kind==="runner"?"runner job":"transport request"} with ${x.businessName} has been received.${x.serviceName?` Service: ${x.serviceName}.`:""}\nPickup: ${x.pickup}\nDestination: ${x.destination}\nFirst trip: ${formatWhen(x.startsAt)}${x.occurrences&&x.occurrences>1?`\nRecurring trips: ${x.occurrences}`:""}${x.total!=null&&x.total>0?`\nFare: ${formatBND(x.total)}`:"\nFare: awaiting quote"}`,
+ confirmed:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your ${x.kind==="runner"?"runner job":"trip"} with ${x.businessName} is confirmed.\nPickup: ${x.pickup}\nDestination: ${x.destination}\nTime: ${formatWhen(x.startsAt)}${x.total!=null&&x.total>0?`\nFare: ${formatBND(x.total)}`:""}`,
+ quote:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your fare from ${x.pickup} to ${x.destination} with ${x.businessName} is ${formatBND(x.total||0)}. Reply here to confirm.`,
+ reminder:(x:TransportTemplateInput)=>`Hi ${x.customerName} 👋 Reminder for your ${x.kind==="runner"?"runner job":"trip"} with ${x.businessName}. Pickup: ${x.pickup}. Destination: ${x.destination}. Time: ${formatWhen(x.startsAt)}.`,
+ recurringConfirmed:(x:TransportTemplateInput)=>`Hi ${x.customerName}, your recurring transport with ${x.businessName} is confirmed.${x.occurrences?` ${x.occurrences} scheduled trips.`:""} First pickup: ${formatWhen(x.startsAt)}. Route: ${x.pickup} → ${x.destination}.`,
 };
 
 export function whatsAppHref(phone:string,message:string){
