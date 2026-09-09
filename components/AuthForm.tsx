@@ -20,7 +20,11 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     setMessage("");
 
     const result = mode === "signup"
-      ? await supabase.auth.signUp({ email, password })
+      ? await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/auth/callback` }
+        })
       : await supabase.auth.signInWithPassword({ email, password });
 
     if (result.error) {
@@ -30,7 +34,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     }
 
     if (mode === "signup" && !result.data.session) {
-      setMessage("Check your email to confirm your account, then sign in.");
+      setMessage("Check your email to confirm your account. The link will bring you back to create your store.");
       setLoading(false);
       return;
     }
