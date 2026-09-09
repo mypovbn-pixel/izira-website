@@ -2,13 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { supabasePublishableKey, supabaseUrl } from "@/lib/supabase-public";
+import { appointmentWhatsApp, whatsAppHref } from "@/lib/whatsappTemplates";
 import styles from "./ServiceBooking.module.css";
 
 type Service={id:string;name:string;description:string|null;price:number;duration_minutes:number;buffer_minutes:number;deposit_amount:number|null;is_active:boolean};
 type Props={slug:string;businessName:string;businessWhatsApp:string|null;services:Service[]};
-
-function digits(value:string){return value.replace(/\D/g,"")}
-function waHref(phone:string,message:string){return `https://wa.me/${digits(phone)}?text=${encodeURIComponent(message)}`}
 
 export default function ServiceBooking({slug,businessName,businessWhatsApp,services}:Props){
   const [serviceId,setServiceId]=useState(services[0]?.id||"");
@@ -46,7 +44,7 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
     const payment=result.payment||{};
     const sellerPhone=result.business?.whatsapp||businessWhatsApp;
     const when=new Date(appointment.starts_at).toLocaleString([], {dateStyle:"medium",timeStyle:"short"});
-    const message=`Hi, I just requested a booking with ${businessName}.\n\nService: ${service.name}\nDate & time: ${when}\nTotal: BND ${Number(service.price).toFixed(2)}${service.deposit_amount!=null?`\nDeposit: BND ${Number(service.deposit_amount).toFixed(2)}`:""}\nName: ${appointment.customer_name}`;
+    const message=appointmentWhatsApp.requested({businessName,customerName:appointment.customer_name,serviceName:service.name,startsAt:appointment.starts_at,total:Number(service.price),deposit:service.deposit_amount});
     return <div className={`card ${styles.success}`}>
       <div className={styles.mark}>✓</div>
       <div className="eyebrow">BOOKING REQUESTED</div>
@@ -58,7 +56,7 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
         <div><span>Status</span><b>Pending confirmation</b></div>
       </div>
       {service.deposit_amount!=null&&payment.bank_name&&payment.account_number&&<div className="card" style={{textAlign:"left",marginTop:16}}><div className="eyebrow">DEPOSIT PAYMENT</div><p><b>{payment.bank_name}</b><br/>{payment.account_name}<br/><span style={{fontSize:22,fontWeight:800}}>{payment.account_number}</span></p><p className="muted">Deposit due: <b>BND {Number(service.deposit_amount).toFixed(2)}</b>. Continue on WhatsApp to send your payment receipt to the seller.</p></div>}
-      {sellerPhone&&<a className="btn" style={{display:"inline-block",marginTop:18}} href={waHref(sellerPhone,message)} target="_blank" rel="noreferrer">Continue on WhatsApp</a>}
+      {sellerPhone&&<a className="btn" style={{display:"inline-block",marginTop:18}} href={whatsAppHref(sellerPhone,message)} target="_blank" rel="noreferrer">Continue on WhatsApp</a>}
       <button className="btn secondary" style={{marginTop:10,marginLeft:8}} onClick={()=>{setResult(null);setStartsAt("");setNote("")}}>Book another</button>
     </div>
   }
@@ -73,13 +71,14 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
     <div className={`card ${styles.form}`}>
       <div className="eyebrow">BOOK APPOINTMENT</div>
       <h2>{selected?.name||"Choose a service"}</h2>
-      {selected&&<p className="muted">BND {selected.price.toFixed(2)} · {selected.duration_minutes} minutes{selected.deposit_amount!=null?` · BND ${selected.deposit_amount.toFixed(2)} deposit`:""}</p>}
+      {selected&&<p className="muted">BND {selected.price.toFixed(2)} · {selected.duration_minutes} minutes{selected.buffer_minutes?` · ${selected.buffer_minutes} min buffer`:""}{selected.deposit_amount!=null?` · BND ${selected.deposit_amount.toFixed(2)} deposit`:""}</p>}
       <div className="field"><label>Date & time</label><input type="datetime-local" value={startsAt} onChange={e=>setStartsAt(e.target.value)} min={new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16)}/></div>
+      <p className="muted" style={{fontSize:12,marginTop:-4}}>KADAI checks the seller’s appointment hours, blocked times and existing bookings before accepting your request.</p>
       <div className="field"><label>Your name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name"/></div>
       <div className="field"><label>WhatsApp number</label><input value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+673 ..."/></div>
       <div className="field"><label>Notes</label><textarea rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="Anything the seller should know?"/></div>
       {error&&<p style={{color:"crimson",fontSize:14}}>{error}</p>}
-      <button className="btn" disabled={loading||!selected} onClick={book}>{loading?"Sending request…":"Request appointment"}</button>
+      <button className="btn" disabled={loading||!selected} onClick={book}>{loading?"Checking availability…":"Request appointment"}</button>
       <p className="muted" style={{fontSize:13,marginBottom:0}}>The seller will confirm your appointment. No customer account is required.</p>
     </div>
   </section>
