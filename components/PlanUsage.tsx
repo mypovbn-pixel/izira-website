@@ -9,9 +9,9 @@ type Plan = "free"|"starter"|"pro"|"business";
 type Business={id:string;name:string;slug:string;plan:Plan;custom_domain:string|null;hide_izira_branding:boolean};
 
 const planMeta:Record<Plan,{label:string;price:string;limit:number|null;features:string[]}>= {
- free:{label:"Free",price:"BND 0",limit:30,features:["30 orders/month","Unlimited products","Basic storefront","Pickup + delivery","Receipt upload","Powered by KADAI attribution"]},
- starter:{label:"Starter",price:"BND 8/month",limit:150,features:["150 orders/month","Preorder campaigns","Availability & capacity slots","Variants/add-ons (next)","Customer list","Sales dashboard"]},
- pro:{label:"Pro",price:"BND 18/month",limit:null,features:["Unlimited orders","Custom domain entitlement","Remove KADAI attribution","Advanced preorder controls","Exports & deeper analytics (next)","Up to 3 staff later"]},
+ free:{label:"Free",price:"BND 0",limit:30,features:["30 orders/month","Unlimited products & services","Products, appointments or both","1 active preorder campaign","Basic capacity slots","Basic customer history","Manual WhatsApp actions","Powered by KADAI attribution"]},
+ starter:{label:"Starter",price:"BND 10/month",limit:150,features:["150 orders/month","Unlimited preorder campaigns","Advanced availability & capacity","Richer customer history","Sales dashboard & forecast","Reminder/automation features as available"]},
+ pro:{label:"Pro",price:"BND 24/month",limit:null,features:["Unlimited orders","Custom domain entitlement","Remove KADAI attribution","Advanced controls & automation","Exports & deeper analytics","Up to 3 staff later"]},
  business:{label:"Business",price:"Not launched",limit:null,features:["Multiple stores","More staff","Advanced automation","Priority support"]}
 };
 
@@ -63,7 +63,7 @@ export default function PlanUsage(){
      <div><div className="eyebrow">YOUR PLAN</div><h2 style={{margin:"6px 0"}}>{meta.label}</h2><div className="muted">{meta.price}</div></div>
      <div style={{textAlign:"right"}}><b style={{fontSize:34}}>{orders}{meta.limit?` / ${meta.limit}`:""}</b><div className="muted">orders this month</div></div>
     </div>
-    {meta.limit&&<><div style={{height:12,background:"#eee3da",borderRadius:999,overflow:"hidden",marginTop:22}}><div style={{height:"100%",width:`${percent}%`,background:"#a8512d"}}/></div><p className="muted">You can take {Math.max(0,meta.limit-orders)} more orders this month.</p></>}
+    {meta.limit&&<><div style={{height:12,background:"#eee3da",borderRadius:999,overflow:"hidden",marginTop:22}}><div style={{height:"100%",width:`${percent}%`,background:"#b96545"}}/></div><p className="muted">You can take {Math.max(0,meta.limit-orders)} more orders this month.</p></>}
     {!meta.limit&&<p className="muted" style={{marginTop:20}}>You have unlimited monthly orders on this plan.</p>}
    </div>
   </section>
@@ -76,10 +76,12 @@ export default function PlanUsage(){
 
   <section className="section" style={{paddingTop:10}}>
    <h2>What your plan unlocks</h2><div className="grid3">
-    <div className="card"><b>Preorders & capacity</b><p className="muted">{business.plan==="free"?"Available on Starter and Pro.":"Ready to use."}</p></div>
+    <div className="card"><b>Preorders & capacity</b><p className="muted">{business.plan==="free"?"Basic capacity + 1 active preorder are included. Starter and Pro unlock advanced controls.":"Ready to use."}</p></div>
     <div className="card"><b>Your own domain</b><p className="muted">{["pro","business"].includes(business.plan)?business.custom_domain||"Included with your plan. Domain connection will be enabled at hosting stage.":"Available on Pro."}</p></div>
     <div className="card"><b>Remove KADAI attribution</b><p className="muted">{["pro","business"].includes(business.plan)?business.hide_izira_branding?"Powered by KADAI is hidden.":"Available with your plan.":"Available on Pro."}</p></div>
    </div>
   </section>
+
+  <section className="card" style={{marginTop:10,textAlign:"center"}}><div className="eyebrow">ANNUAL</div><p className="muted" style={{marginBottom:0}}>Starter BND 100/year · Pro BND 240/year.</p></section>
  </main>
 }
