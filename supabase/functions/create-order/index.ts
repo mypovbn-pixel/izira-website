@@ -52,7 +52,6 @@ Deno.serve(async(req:Request)=>{
 
     let collectionAt:null|string=null
     if(slot_id){
-      if(business.plan==='free')return json({error:'Scheduled collection slots are unavailable on this store plan.'},403)
       const{data:slot,error:slotError}=await supabase.from('availability_slots').select('id,slot_date,label,fulfilment,capacity,is_active').eq('id',slot_id).eq('business_id',business.id).single()
       if(slotError||!slot||!slot.is_active||slot.fulfilment!==fulfilment)return json({error:'Selected collection slot is unavailable'},400)
       const dayStart=`${slot.slot_date}T00:00:00+08:00`
