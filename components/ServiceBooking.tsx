@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { supabasePublishableKey, supabaseUrl } from "@/lib/supabase-public";
+import styles from "./ServiceBooking.module.css";
 
 type Service={id:string;name:string;description:string|null;price:number;duration_minutes:number;buffer_minutes:number;deposit_amount:number|null;is_active:boolean};
 type Props={slug:string;businessName:string;businessWhatsApp:string|null;services:Service[]};
@@ -18,7 +19,6 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
   const [result,setResult]=useState<any>(null);
-
   const selected=useMemo(()=>services.find(s=>s.id===serviceId)||null,[services,serviceId]);
 
   async function book(){
@@ -47,12 +47,12 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
     const sellerPhone=result.business?.whatsapp||businessWhatsApp;
     const when=new Date(appointment.starts_at).toLocaleString([], {dateStyle:"medium",timeStyle:"short"});
     const message=`Hi, I just requested a booking with ${businessName}.\n\nService: ${service.name}\nDate & time: ${when}\nTotal: BND ${Number(service.price).toFixed(2)}${service.deposit_amount!=null?`\nDeposit: BND ${Number(service.deposit_amount).toFixed(2)}`:""}\nName: ${appointment.customer_name}`;
-    return <div className="card booking-success">
-      <div className="success-mark">✓</div>
+    return <div className={`card ${styles.success}`}>
+      <div className={styles.mark}>✓</div>
       <div className="eyebrow">BOOKING REQUESTED</div>
       <h2 style={{fontSize:34,margin:"6px 0 10px"}}>Your appointment request is in.</h2>
       <p className="muted">{service.name} · {when}</p>
-      <div className="booking-summary">
+      <div className={styles.summary}>
         <div><span>Total</span><b>BND {Number(service.price).toFixed(2)}</b></div>
         {service.deposit_amount!=null&&<div><span>Deposit</span><b>BND {Number(service.deposit_amount).toFixed(2)}</b></div>}
         <div><span>Status</span><b>Pending confirmation</b></div>
@@ -63,14 +63,14 @@ export default function ServiceBooking({slug,businessName,businessWhatsApp,servi
     </div>
   }
 
-  return <section className="service-booking">
-    <div className="service-grid">
-      {services.map(service=><button type="button" key={service.id} className={`service-card ${service.id===serviceId?"selected":""}`} onClick={()=>setServiceId(service.id)}>
+  return <section className={styles.layout}>
+    <div className={styles.services}>
+      {services.map(service=><button type="button" key={service.id} className={`${styles.service} ${service.id===serviceId?styles.selected:""}`} onClick={()=>setServiceId(service.id)}>
         <div><span className="eyebrow">SERVICE</span><h3>{service.name}</h3><p>{service.description||"Book this service directly."}</p></div>
-        <div className="service-meta"><b>BND {service.price.toFixed(2)}</b><span>{service.duration_minutes} min</span>{service.deposit_amount!=null&&<span>BND {service.deposit_amount.toFixed(2)} deposit</span>}</div>
+        <div className={styles.meta}><b>BND {service.price.toFixed(2)}</b><span>{service.duration_minutes} min</span>{service.deposit_amount!=null&&<span>BND {service.deposit_amount.toFixed(2)} deposit</span>}</div>
       </button>)}
     </div>
-    <div className="card booking-form">
+    <div className={`card ${styles.form}`}>
       <div className="eyebrow">BOOK APPOINTMENT</div>
       <h2>{selected?.name||"Choose a service"}</h2>
       {selected&&<p className="muted">BND {selected.price.toFixed(2)} · {selected.duration_minutes} minutes{selected.deposit_amount!=null?` · BND ${selected.deposit_amount.toFixed(2)} deposit`:""}</p>}
