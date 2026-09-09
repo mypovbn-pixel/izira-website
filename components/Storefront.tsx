@@ -16,7 +16,10 @@ export default function Storefront({slug,products,slots,pickupEnabled,deliveryEn
  const [deliveryAddress,setDeliveryAddress]=useState("");
  const [note,setNote]=useState("");
  const [submitted,setSubmitted]=useState<any>(null);
+ const [receipt,setReceipt]=useState<File|null>(null);
+ const [receiptUploaded,setReceiptUploaded]=useState(false);
  const [loading,setLoading]=useState(false);
+ const [receiptLoading,setReceiptLoading]=useState(false);
  const [error,setError]=useState("");
 
  const total=useMemo(()=>products.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0)+(fulfilment==="delivery"&&Object.values(cart).some(Boolean)?3:0),[cart,products,fulfilment]);
@@ -45,7 +48,18 @@ export default function Storefront({slug,products,slots,pickupEnabled,deliveryEn
    finally{setLoading(false);}
  }
 
- if(submitted){const order=submitted.order;const payment=submitted.payment||{};return <div className="card" style={{maxWidth:620,margin:"60px auto",textAlign:"center"}}><div style={{fontSize:52}}>✓</div><h1>Order received</h1><p>Your order number is <b>#{order.order_number}</b>.</p><p className="muted">Total: BND {Number(order.total).toFixed(2)} · Awaiting payment confirmation.</p>{payment.bank_name&&payment.account_number?<div className="card" style={{margin:"22px 0",textAlign:"left"}}><div className="eyebrow">BANK TRANSFER</div><p><b>{payment.bank_name}</b><br/>{payment.account_name}<br/><span style={{fontSize:22,fontWeight:800}}>{payment.account_number}</span></p><p className="muted">Transfer the exact amount and keep your receipt. Receipt upload is the next checkout feature being connected.</p></div>:<p className="muted">The seller will send payment instructions directly.</p>}{fulfilment==="pickup"&&submitted.pickup_address&&<div className="card" style={{textAlign:"left"}}><b>Pickup</b><p className="muted">{submitted.pickup_address}</p></div>}<button className="btn" style={{marginTop:18}} onClick={()=>{setSubmitted(null);setCart({});setSlotId("")}}>Back to store</button></div>}
+ async function uploadReceipt(){
+   if(!receipt||!submitted?.order?.id)return;
+   setError("");setReceiptLoading(true);
+   try{
+     const data=await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(receipt)});
+     const res=await fetch(`${supabaseUrl}/functions/v1/upload-receipt`,{method:"POST",headers:{"Content-Type":"application/json","apikey":supabasePublishableKey},body:JSON.stringify({order_id:submitted.order.id,customer_phone:phone,file_name:receipt.name,mime_type:receipt.type,data_base64:data})});
+     const json=await res.json();if(!res.ok)throw new Error(json.error||"Unable to upload receipt");setReceiptUploaded(true);
+   }catch(e:any){setError(e.message||"Unable to upload receipt");}
+   finally{setReceiptLoading(false)}
+ }
+
+ if(submitted){const order=submitted.order;const payment=submitted.payment||{};return <div className="card" style={{maxWidth:620,margin:"60px auto",textAlign:"center"}}><div style={{fontSize:52}}>✓</div><h1>Order received</h1><p>Your order number is <b>#{order.order_number}</b>.</p><p className="muted">Total: BND {Number(order.total).toFixed(2)} · {receiptUploaded?"Receipt uploaded":"Awaiting payment"}.</p>{payment.bank_name&&payment.account_number?<div className="card" style={{margin:"22px 0",textAlign:"left"}}><div className="eyebrow">BANK TRANSFER</div><p><b>{payment.bank_name}</b><br/>{payment.account_name}<br/><span style={{fontSize:22,fontWeight:800}}>{payment.account_number}</span></p><p className="muted">Transfer the exact amount, then upload your receipt below.</p></div>:<p className="muted">The seller will send payment instructions directly.</p>}{!receiptUploaded&&<div className="card" style={{margin:"18px 0",textAlign:"left"}}><b>Upload payment receipt</b><p className="muted">JPG, PNG, WebP or PDF · maximum 5 MB.</p><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={e=>setReceipt(e.target.files?.[0]||null)}/>{receipt&&<button className="btn" style={{marginTop:14}} disabled={receiptLoading} onClick={uploadReceipt}>{receiptLoading?"Uploading…":"Submit receipt"}</button>}</div>}{receiptUploaded&&<div className="card" style={{margin:"18px 0",background:"#eef7ee"}}><b>Receipt submitted.</b><p className="muted">The seller can now verify your payment from their dashboard.</p></div>}{fulfilment==="pickup"&&submitted.pickup_address&&<div className="card" style={{textAlign:"left"}}><b>Pickup</b><p className="muted">{submitted.pickup_address}</p></div>}{error&&<p style={{color:"crimson"}}>{error}</p>}<button className="btn secondary" style={{marginTop:18}} onClick={()=>{setSubmitted(null);setCart({});setSlotId("");setReceipt(null);setReceiptUploaded(false)}}>Back to store</button></div>}
 
  if(!pickupEnabled&&!deliveryEnabled)return <div className="card"><h2>Ordering is temporarily closed</h2><p className="muted">This seller has paused pickup and delivery.</p></div>;
 
