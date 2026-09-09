@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 type Turn={from:"bot"|"user";text:string};
@@ -40,11 +40,26 @@ export default function KadaiAssistant(){
  const [input,setInput]=useState("");
  const [turns,setTurns]=useState<Turn[]>([{from:"bot",text:"Hi! 👋 I’m the KADAI Assistant. How can I help?"}]);
  const botName=useMemo(()=>process.env.NEXT_PUBLIC_KADAI_BOT_NAME||"KADAI Assistant",[]);
+ const bubblaSiteId=process.env.NEXT_PUBLIC_KADAI_BUBBLAV_SITE_ID||"";
+
+ useEffect(()=>{
+  if(!bubblaSiteId)return;
+  const existing=document.querySelector('script[data-kadai-bubblav="true"]');
+  if(existing)return;
+  const script=document.createElement('script');
+  script.src='https://www.bubblav.com/widget.js';
+  script.defer=true;
+  script.dataset.siteId=bubblaSiteId;
+  script.dataset.kadaiBubblav='true';
+  document.body.appendChild(script);
+ },[bubblaSiteId]);
 
  function ask(value?:string){
   const question=(value??input).trim();if(!question)return;
   setTurns(v=>[...v,{from:"user",text:question},{from:"bot",text:answerFor(question)}]);setInput("");
  }
+
+ if(bubblaSiteId)return null;
 
  return <>
   {open&&<div style={{position:"fixed",right:18,bottom:88,width:"min(380px,calc(100vw - 24px))",height:"min(590px,calc(100vh - 120px))",background:"#fffaf6",border:"1px solid #e7d8ce",borderRadius:24,boxShadow:"0 20px 70px rgba(60,35,25,.18)",zIndex:1000,display:"flex",flexDirection:"column",overflow:"hidden"}}>
