@@ -1,17 +1,62 @@
 import Link from "next/link";
 
 export default function Home() {
-  return <main className="shell">
-    <nav className="nav"><div className="brand">IZIRA</div><div className="navlinks"><a href="#products">Products</a><Link className="pill" href="/kadai">Explore KADAI</Link></div></nav>
-    <section className="hero">
-      <div><div className="eyebrow">BRUNEI · DIGITAL PRODUCTS</div><h1>Useful digital products, built with care.</h1><p>IZIRA creates simple digital products for real everyday needs — from small-business commerce to meaningful event experiences and community tools.</p><div style={{display:"flex",gap:12,marginTop:26,flexWrap:"wrap"}}><Link className="btn" href="/kadai">Explore KADAI</Link><a className="btn secondary" href="https://mypov.site">Visit myPOV</a></div></div>
-      <div className="hero-card"><div className="eyebrow" style={{color:"#efb892"}}>FEATURED PRODUCT</div><div style={{fontSize:46,fontWeight:900,letterSpacing:"-.05em",marginTop:8}}>KADAI</div><div style={{color:"#d7cec7",fontSize:13}}>by IZIRA</div><h2 style={{fontSize:32,margin:"18px 0 8px"}}>Buka Kadai. Start selling.</h2><p style={{color:"#d7cec7"}}>A simple online storefront and order manager for microbusinesses, home businesses and small sellers.</p><Link className="btn" href="/kadai" style={{marginTop:12}}>See KADAI</Link></div>
-    </section>
-    <section id="products" className="section"><div className="eyebrow">IZIRA PRODUCTS</div><h2>Different products. One thoughtful foundation.</h2><div className="grid3" style={{marginTop:24}}>
-      <div className="card"><h3>KADAI</h3><p className="muted">Simple online commerce for microbusinesses. Storefronts, orders, preorders and capacity without complicated ecommerce software.</p><Link href="/kadai"><b>Explore KADAI →</b></Link></div>
-      <div className="card"><h3>myPOV</h3><p className="muted">Digital wedding experiences built around invitations, guest memories and every perspective of the day.</p><a href="https://mypov.site"><b>Visit myPOV →</b></a></div>
-      <div className="card"><h3>More from IZIRA</h3><p className="muted">Community and family-focused products are being developed under the wider IZIRA ecosystem.</p></div>
-    </section>
-    <footer style={{padding:"32px 0",borderTop:"1px solid #eadfd6"}}><div className="brand">IZIRA</div><p className="muted">Brunei · Building useful digital products.</p></footer>
-  </main>
+  return (
+    <main className="shell">
+      <nav className="nav">
+        <div className="brand">IZIRA</div>
+        <div className="navlinks">
+          <a href="#products">Products</a>
+          <Link className="pill" href="/kadai">Explore KADAI</Link>
+        </div>
+      </nav>
+
+      <section className="hero">
+        <div>
+          <div className="eyebrow">BRUNEI · DIGITAL PRODUCTS</div>
+          <h1>Useful digital products, built with care.</h1>
+          <p>IZIRA creates simple digital products for real everyday needs — from small-business commerce to meaningful event experiences and community tools.</p>
+          <div style={{display:"flex",gap:12,marginTop:26,flexWrap:"wrap"}}>
+            <Link className="btn" href="/kadai">Explore KADAI</Link>
+            <a className="btn secondary" href="https://mypov.site">Visit myPOV</a>
+          </div>
+        </div>
+
+        <div className="hero-card">
+          <div className="eyebrow" style={{color:"#efb892"}}>FEATURED PRODUCT</div>
+          <div style={{fontSize:46,fontWeight:900,letterSpacing:"-.05em",marginTop:8}}>KADAI</div>
+          <div style={{color:"#d7cec7",fontSize:13}}>by IZIRA</div>
+          <h2 style={{fontSize:32,margin:"18px 0 8px"}}>Buka Kadai. Start Jual.</h2>
+          <p style={{color:"#d7cec7"}}>A simple online storefront and business manager for microbusinesses, home businesses and small service operators.</p>
+          <Link className="btn" href="/kadai" style={{marginTop:12}}>See KADAI</Link>
+        </div>
+      </section>
+
+      <section id="products" className="section">
+        <div className="eyebrow">IZIRA PRODUCTS</div>
+        <h2>Different products. One thoughtful foundation.</h2>
+        <div className="grid3" style={{marginTop:24}}>
+          <div className="card">
+            <h3>KADAI</h3>
+            <p className="muted">Simple online business tools for microbusinesses: storefronts, orders, appointments, preorders, capacity and service bookings without complicated software.</p>
+            <Link href="/kadai"><b>Explore KADAI →</b></Link>
+          </div>
+          <div className="card">
+            <h3>myPOV</h3>
+            <p className="muted">Digital wedding experiences built around invitations, guest memories and every perspective of the day.</p>
+            <a href="https://mypov.site"><b>Visit myPOV →</b></a>
+          </div>
+          <div className="card">
+            <h3>More from IZIRA</h3>
+            <p className="muted">Community and family-focused products are being developed under the wider IZIRA ecosystem.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer style={{padding:"32px 0",borderTop:"1px solid #eadfd6"}}>
+        <div className="brand">IZIRA</div>
+        <p className="muted">Brunei · Building useful digital products.</p>
+      </footer>
+    </main>
+  );
 }
