@@ -1,0 +1,62 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+
+type Order={id:string;order_number:number;customer_name:string;customer_phone:string;total:number|string;fulfilment:string;payment_status:string;order_status:string;created_at:string};
+type Receipt={id:string;order_id:string;storage_path:string;uploaded_at:string};
+const orderStates=["new","confirmed","preparing","ready","completed","cancelled"];
+const paymentStates=["awaiting_payment","receipt_uploaded","paid","rejected"];
+
+export default function MerchantOrders(){
+ const router=useRouter();
+ const supabase=createClient();
+ const [business,setBusiness]=useState<{id:string;name:string;slug:string}|null>(null);
+ const [orders,setOrders]=useState<Order[]>([]);
+ const [receipts,setReceipts]=useState<Receipt[]>([]);
+ const [loading,setLoading]=useState(true);
+ const [message,setMessage]=useState("");
+
+ async function load(){
+  const {data:{user}}=await supabase.auth.getUser();
+  if(!user){router.replace("/login");return}
+  const {data:b}=await supabase.from("businesses").select("id,name,slug").eq("owner_id",user.id).limit(1).maybeSingle();
+  if(!b){router.replace("/onboarding");return}
+  setBusiness(b);
+  const [{data:o},{data:r}]=await Promise.all([
+   supabase.from("orders").select("id,order_number,customer_name,customer_phone,total,fulfilment,payment_status,order_status,created_at").eq("business_id",b.id).order("created_at",{ascending:false}),
+   supabase.from("payment_receipts").select("id,order_id,storage_path,uploaded_at").eq("business_id",b.id).order("uploaded_at",{ascending:false})
+  ]);
+  setOrders((o||[]) as Order[]);setReceipts((r||[]) as Receipt[]);setLoading(false);
+ }
+ useEffect(()=>{load()},[]);
+
+ async function updateOrder(id:string,field:"order_status"|"payment_status",value:string){
+  setMessage("");
+  const {error}=await supabase.from("orders").update({[field]:value}).eq("id",id);
+  if(error){setMessage(error.message);return}
+  await load();
+ }
+ async function openReceipt(orderId:string){
+  setMessage("");
+  const receipt=receipts.find(r=>r.order_id===orderId);
+  if(!receipt){setMessage("No receipt attached to this order.");return}
+  const {data,error}=await supabase.storage.from("payment-receipts").createSignedUrl(receipt.storage_path,120);
+  if(error||!data?.signedUrl){setMessage(error?.message||"Unable to open receipt.");return}
+  window.open(data.signedUrl,"_blank","noopener,noreferrer");
+ }
+
+ if(loading)return <main className="shell"><div className="card" style={{marginTop:60}}>Loading orders…</div></main>;
+ if(!business)return null;
+ return <main className="shell" style={{maxWidth:1100}}>
+   <div className="nav"><div><div className="eyebrow">{business.name}</div><h1 style={{margin:"5px 0"}}>Orders</h1></div><div className="navlinks"><Link href="/dashboard">Dashboard</Link><Link className="pill" href={`/${business.slug}`}>Storefront</Link></div></div>
+   {message&&<div className="card" style={{marginBottom:14}}>{message}</div>}
+   {orders.length===0?<div className="card"><h2>No orders yet</h2><p className="muted">New customer orders will appear here.</p></div>:<div style={{display:"grid",gap:12}}>{orders.map(o=>{const receipt=receipts.find(r=>r.order_id===o.id);return <article className="card" key={o.id}>
+     <div style={{display:"flex",justifyContent:"space-between",gap:18,flexWrap:"wrap"}}><div><div className="eyebrow">ORDER #{o.order_number}</div><h3 style={{margin:"6px 0"}}>{o.customer_name}</h3><div className="muted">{o.customer_phone} · {o.fulfilment} · BND {Number(o.total).toFixed(2)} · {new Date(o.created_at).toLocaleString()}</div></div>{receipt&&<button className="btn" onClick={()=>openReceipt(o.id)}>View receipt</button>}</div>
+     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:18}}><div className="field"><label>Payment</label><select value={o.payment_status} onChange={e=>updateOrder(o.id,"payment_status",e.target.value)}>{paymentStates.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}</select></div><div className="field"><label>Order</label><select value={o.order_status} onChange={e=>updateOrder(o.id,"order_status",e.target.value)}>{orderStates.map(s=><option key={s} value={s}>{s}</option>)}</select></div></div>
+     {o.payment_status==="receipt_uploaded"&&<div className="card" style={{marginTop:14,background:"#fff8ea"}}><b>Receipt waiting for review.</b><div style={{display:"flex",gap:10,marginTop:10,flexWrap:"wrap"}}><button className="btn" onClick={()=>updateOrder(o.id,"payment_status","paid")}>Approve payment</button><button className="btn secondary" onClick={()=>updateOrder(o.id,"payment_status","rejected")}>Reject receipt</button></div></div>}
+   </article>})}</div>}
+ </main>;
+}
