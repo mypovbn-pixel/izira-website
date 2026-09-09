@@ -4,7 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-const reserved = new Set(["dashboard","login","signup","pricing","about","admin","api","onboarding","support","settings"]);
+const reserved = new Set(["kadai","dashboard","login","signup","pricing","about","admin","api","onboarding","support","settings","orders","products","customers","checkout","auth","terms","privacy"]);
 
 function normaliseSlug(value:string){return value.toLowerCase().trim().replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)}
 
@@ -23,22 +23,23 @@ export default function OnboardingForm(){
     e.preventDefault(); setLoading(true); setMessage("");
     const {data:{user}}=await supabase.auth.getUser();
     if(!user){router.push("/login");return}
-    if(clean.length<3){setMessage("Store URL must be at least 3 characters.");setLoading(false);return}
-    if(reserved.has(clean)){setMessage("That store URL is reserved. Try another one.");setLoading(false);return}
+    if(clean.length<3){setMessage("Your KADAI link must be at least 3 characters.");setLoading(false);return}
+    if(reserved.has(clean)){setMessage("That KADAI link is reserved. Try another one.");setLoading(false);return}
     const {data:existing}=await supabase.from("businesses").select("id").eq("slug",clean).maybeSingle();
-    if(existing){setMessage("That store URL is already taken.");setLoading(false);return}
+    if(existing){setMessage("That KADAI link is already taken.");setLoading(false);return}
     const {error}=await supabase.from("businesses").insert({owner_id:user.id,name:name.trim(),slug:clean,description:description.trim()||null,whatsapp:whatsapp.trim()||null});
     if(error){setMessage(error.message);setLoading(false);return}
     router.push("/dashboard");router.refresh();
   }
 
   return <form onSubmit={submit} className="card" style={{maxWidth:620,margin:"50px auto",padding:28}}>
-    <div className="eyebrow">STEP 1 OF 2</div><h1>Create your storefront</h1><p className="muted">This becomes your public ordering page.</p>
+    <div style={{marginBottom:24}}><div style={{fontSize:30,fontWeight:900,letterSpacing:"-.04em",lineHeight:1}}>KADAI</div><div className="muted" style={{fontSize:12,marginTop:4}}>by IZIRA</div></div>
+    <div className="eyebrow">BUKA KADAI</div><h1>Let’s set up your kadai.</h1><p className="muted">Your customers will use this page to see what you sell and place orders.</p>
     <div className="field"><label>Business name</label><input required value={name} onChange={e=>setName(e.target.value)} placeholder="Aisyah Bakery"/></div>
-    <div className="field"><label>Your IZIRA link</label><div style={{display:"flex",alignItems:"center",gap:8}}><span className="muted">izira.xyz/</span><input required value={slug} onChange={e=>setSlug(normaliseSlug(e.target.value))} placeholder={normaliseSlug(name)||"aisyahbakery"}/></div><div className="muted" style={{fontSize:13,marginTop:6}}>Preview: izira.xyz/{clean||"yourstore"}</div></div>
-    <div className="field"><label>Short description</label><textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Home-baked treats · Preorder only"/></div>
+    <div className="field"><label>Your KADAI link</label><div style={{display:"flex",alignItems:"center",gap:8}}><span className="muted">izira.xyz/</span><input required value={slug} onChange={e=>setSlug(normaliseSlug(e.target.value))} placeholder={normaliseSlug(name)||"aisyahbakery"}/></div><div className="muted" style={{fontSize:13,marginTop:6}}>Customers will visit: izira.xyz/{clean||"yourstore"}</div></div>
+    <div className="field"><label>Tell customers about your business</label><textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Fresh bakes made to order · Preorder only"/></div>
     <div className="field"><label>WhatsApp number</label><input value={whatsapp} onChange={e=>setWhatsapp(e.target.value)} placeholder="+673 ..."/></div>
     {message&&<div className="card" style={{padding:12,marginBottom:14}}>{message}</div>}
-    <button className="btn" disabled={loading}>{loading?"Creating store…":"Create my store"}</button>
+    <button className="btn" disabled={loading}>{loading?"Opening your KADAI…":"Buka Kadai"}</button>
   </form>
 }
