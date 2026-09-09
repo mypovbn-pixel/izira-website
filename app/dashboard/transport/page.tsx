@@ -1,5 +1,6 @@
 import TransportManager from "@/components/TransportManager";
+import TransportNotifier from "@/components/TransportNotifier";
 
 export default function TransportPage(){
-  return <TransportManager/>;
+  return <><TransportNotifier/><TransportManager/></>;
 }
