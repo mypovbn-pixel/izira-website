@@ -21,18 +21,19 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
 
   const mode=business.business_mode||"products";
   const wantsProducts=mode==="products"||mode==="both";
-  const wantsAppointments=mode==="appointments"||mode==="both";
+  const wantsServices=mode==="appointments"||mode==="both";
   const [{data:products,error:productsError},{data:slots},{data:campaigns},{data:services,error:servicesError}]=await Promise.all([
     wantsProducts?supabasePublic.from("products").select("id,name,description,price,stock_limit,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:true}):Promise.resolve({data:[],error:null}),
     wantsProducts?supabasePublic.from("availability_slots").select("id,slot_date,label,fulfilment,capacity,is_active").eq("business_id",business.id).eq("is_active",true).gte("slot_date",new Date().toISOString().slice(0,10)).order("slot_date",{ascending:true}):Promise.resolve({data:[]}),
     wantsProducts?supabasePublic.from("preorder_campaigns").select("id,name,closes_at,collection_start,collection_end,order_limit,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:false}).limit(1):Promise.resolve({data:[]}),
-    wantsAppointments?supabasePublic.from("services").select("id,name,description,price,duration_minutes,buffer_minutes,deposit_amount,is_active").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:true}):Promise.resolve({data:[],error:null})
+    wantsServices?supabasePublic.from("services").select("id,name,description,price,duration_minutes,buffer_minutes,deposit_amount,is_active,service_kind,pricing_mode,max_passengers").eq("business_id",business.id).eq("is_active",true).order("created_at",{ascending:true}):Promise.resolve({data:[],error:null})
   ]);
 
   if(productsError) throw productsError;
   if(servicesError) throw servicesError;
   const campaign=campaigns?.[0]||null;
   const canHideBranding=["pro","business"].includes(business.plan)&&business.hide_izira_branding;
+  const hasRouteServices=(services||[]).some((s:any)=>s.service_kind==="runner"||s.service_kind==="transport");
 
   return <main className="shell">
     <div className="store-head">
@@ -44,7 +45,7 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
       </div>
     </div>
 
-    {mode==="both"&&<div className="store-mode-tabs"><a href="#shop">Shop</a><a href="#book">Book an appointment</a></div>}
+    {mode==="both"&&<div className="store-mode-tabs"><a href="#shop">Shop</a><a href="#book">Book a service</a></div>}
 
     {wantsProducts&&<section id="shop">
       <div className="card" style={{marginBottom:20,padding:16}}>
@@ -62,13 +63,13 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
       />
     </section>}
 
-    {wantsAppointments&&<section id="book" className="section">
-      <div style={{marginBottom:20}}><div className="eyebrow">APPOINTMENTS</div><h2 style={{fontSize:36,margin:"6px 0"}}>Book a service</h2><p className="muted">Choose a service and request a time. The seller will confirm your appointment.</p></div>
+    {wantsServices&&<section id="book" className="section">
+      <div style={{marginBottom:20}}><div className="eyebrow">SERVICES</div><h2 style={{fontSize:36,margin:"6px 0"}}>{hasRouteServices?"Book a service, runner or trip":"Book a service"}</h2><p className="muted">Choose what you need and request a time. KADAI checks availability before accepting the request.</p></div>
       <ServiceBooking
         slug={business.slug}
         businessName={business.name}
         businessWhatsApp={business.whatsapp}
-        services={(services||[]).map((s:any)=>({...s,price:Number(s.price),deposit_amount:s.deposit_amount==null?null:Number(s.deposit_amount)}))}
+        services={(services||[]).map((s:any)=>({...s,price:Number(s.price),deposit_amount:s.deposit_amount==null?null:Number(s.deposit_amount),max_passengers:s.max_passengers==null?null:Number(s.max_passengers)}))}
       />
     </section>}
 
