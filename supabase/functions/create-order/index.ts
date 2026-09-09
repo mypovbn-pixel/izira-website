@@ -69,7 +69,7 @@ Deno.serve(async (req: Request) => {
       delivery_address: fulfilment === 'delivery' ? String(delivery_address).trim().slice(0,500) : null,
       note: note ? String(note).trim().slice(0,1000) : null,
       subtotal, delivery_fee: deliveryFee, total
-    }).select('id,order_number,total,payment_status,order_status').single()
+    }).select('id,order_number,total,payment_status,order_status,public_token').single()
     if (orderError || !order) throw orderError || new Error('Order creation failed')
 
     const { error: itemError } = await supabase.from('order_items').insert(orderItems.map((i: any) => ({ ...i, order_id: order.id })))
