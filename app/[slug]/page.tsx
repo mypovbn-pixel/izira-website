@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Storefront from "@/components/Storefront";
 import { supabasePublic } from "@/lib/supabase-public";
 
-const reserved=new Set(["dashboard","login","signup","pricing","about","admin","api","onboarding","auth"]);
+const reserved=new Set(["kadai","dashboard","login","signup","pricing","about","admin","api","onboarding","auth","support","settings","orders","products","customers","checkout","terms","privacy"]);
 
 export default async function StorePage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;
@@ -49,6 +49,6 @@ export default async function StorePage({params}:{params:Promise<{slug:string}>}
       deliveryEnabled={business.delivery_enabled}
       pickupAddress={business.pickup_address}
     />
-    {!canHideBranding&&<footer style={{textAlign:"center",padding:"50px 0 20px"}} className="muted">Powered by <b>IZIRA</b></footer>}
+    {!canHideBranding&&<footer style={{textAlign:"center",padding:"50px 0 20px"}} className="muted">Powered by <b>KADAI</b></footer>}
   </main>
 }
