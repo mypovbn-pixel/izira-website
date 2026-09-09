@@ -34,7 +34,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     }
 
     if (mode === "signup" && !result.data.session) {
-      setMessage("Check your email to confirm your account. The link will bring you back to create your store.");
+      setMessage("Check your email to confirm your account. The link will bring you back to buka your KADAI.");
       setLoading(false);
       return;
     }
@@ -45,15 +45,19 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
   return (
     <form onSubmit={submit} className="card" style={{ maxWidth: 460, margin: "60px auto", padding: 28 }}>
-      <div className="eyebrow">IZIRA SELLER</div>
-      <h1 style={{ marginBottom: 8 }}>{mode === "signup" ? "Create your seller account" : "Welcome back"}</h1>
-      <p className="muted">{mode === "signup" ? "Start your storefront in a few minutes." : "Sign in to manage your store and orders."}</p>
+      <div style={{marginBottom:24}}>
+        <div style={{fontSize:30,fontWeight:900,letterSpacing:"-.04em",lineHeight:1}}>KADAI</div>
+        <div className="muted" style={{fontSize:12,marginTop:4}}>by IZIRA</div>
+      </div>
+      <div className="eyebrow">{mode === "signup" ? "BUKA KADAI" : "WELCOME BACK"}</div>
+      <h1 style={{ marginBottom: 8 }}>{mode === "signup" ? "Buka Kadai" : "Your KADAI is waiting"}</h1>
+      <p className="muted">{mode === "signup" ? "Create your online kadai in minutes. No website skills needed." : "Sign in to check orders, products and today’s workload."}</p>
       <div className="field"><label>Email</label><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" /></div>
       <div className="field"><label>Password</label><input type="password" required minLength={8} value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 8 characters" /></div>
       {message && <div className="card" style={{ padding: 12, marginBottom: 14 }}>{message}</div>}
-      <button className="btn" disabled={loading} style={{ width: "100%" }}>{loading ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}</button>
+      <button className="btn" disabled={loading} style={{ width: "100%" }}>{loading ? "Please wait…" : mode === "signup" ? "Buka Kadai" : "Sign in"}</button>
       <p className="muted" style={{ textAlign: "center", marginTop: 18 }}>
-        {mode === "signup" ? <>Already have an account? <a href="/login"><b>Sign in</b></a></> : <>New to IZIRA? <a href="/signup"><b>Create an account</b></a></>}
+        {mode === "signup" ? <>Already have a KADAI? <a href="/login"><b>Sign in</b></a></> : <>New to KADAI? <a href="/signup"><b>Buka Kadai</b></a></>}
       </p>
     </form>
   );
