@@ -16,6 +16,16 @@ GitHub is the code/version-history source of truth. Current development branch:
 
 Do not merge to `main`, publish the Lovable project, or attach/connect the production `izira.xyz` domain until preview QA is explicitly approved.
 
+## Preview entry rule
+The existing Lovable project `IZIRA Biz Builder` is a KADAI product preview. Therefore, opening the Lovable preview root `/` must immediately render or redirect to the KADAI landing page at `/kadai`.
+
+This is a preview-only convenience rule. It does **not** change the intended production URL architecture:
+- `izira.xyz/` = IZIRA parent/company site
+- `izira.xyz/kadai` = KADAI product landing page
+- `izira.xyz/{storename}` = seller storefront
+
+Do not show the IZIRA parent homepage as the default Lovable Biz Builder preview surface.
+
 ## Framework-port rule
 The source branch is implemented in Next.js 16. The existing Lovable project uses TanStack Start. Do not blindly replace the Lovable project with the Next.js tree. Port the finished KADAI behavior, routes, visual system and backend contracts into the existing Lovable TanStack structure while preserving GitHub as the authoritative product specification/source.
 
@@ -41,7 +51,7 @@ Existing backend behavior includes:
 Never place a Supabase service-role key or other backend secret in browser code.
 
 ## Required routes
-- `/` — IZIRA parent/company landing surface
+- `/` — IZIRA parent/company landing surface in production; KADAI preview entry in Lovable only
 - `/kadai` — dedicated KADAI product landing page
 - `/:slug` — seller storefront, e.g. `/aisyahbakery`
 - `/:slug/order/:token` — private customer order status
@@ -137,6 +147,7 @@ Prioritize storefronts, structured orders, manual payment verification, capacity
 ## Lovable migration rules
 - Preview only until explicitly approved.
 - Keep the existing Lovable project `IZIRA Biz Builder`.
+- The preview root `/` must open KADAI, not the IZIRA parent homepage.
 - Use the existing external `izira-commerce` Supabase project only.
 - Do not enable Lovable Cloud database for KADAI.
 - Preserve RLS and tenant isolation; never weaken security policies to make UI work.
