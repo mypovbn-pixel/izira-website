@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - feature/microbusiness-platform-v1
+      - feature/kadai-lovable-tanstack
   pull_request:
     branches:
       - main
       - feature/microbusiness-platform-v1
+      - feature/kadai-lovable-tanstack
   workflow_dispatch:
 
 permissions:
@@ -34,16 +36,12 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Type check
-        run: npm run check
+        run: npm run typecheck
 
   build:
-    name: Next.js build
+    name: TanStack build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: https://cafufqdkfkeftqdjewnh.supabase.co
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_HzwDusWmoYut1EtZyupuEg_d2A1W92f
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - name: Checkout
         uses: actions/checkout@v4
