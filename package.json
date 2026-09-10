@@ -8,8 +8,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build"
+    "typecheck": "vite build > /dev/null && tsc --noEmit",
+    "check": "npm run typecheck"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
