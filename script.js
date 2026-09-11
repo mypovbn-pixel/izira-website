@@ -2,8 +2,9 @@ const menuButton=document.querySelector('.menu-toggle');const nav=document.query
 
 const aboutBlueprint=document.getElementById('about-blueprint-image');
 if(aboutBlueprint){
-  Promise.all([1,2,3,4,5].map(i=>fetch(`assets/about-blueprint/part${i}.txt`).then(response=>{
-    if(!response.ok)throw new Error(`About artwork part ${i} failed to load`);
+  const artworkParts=['part1a','part1b','part2','part3','part4','part5'];
+  Promise.all(artworkParts.map(name=>fetch(`assets/about-blueprint/${name}.txt`).then(response=>{
+    if(!response.ok)throw new Error(`About artwork ${name} failed to load`);
     return response.text();
   }))).then(parts=>{
     aboutBlueprint.src=`data:image/webp;base64,${parts.join('').replace(/\s+/g,'')}`;
