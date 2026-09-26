@@ -67,3 +67,19 @@
   .legal-header .site-nav{display:none}
   .legal-main{padding:54px 0 70px}
 }
+
+
+/* Future Projects feature card */
+.portfolio-card-future{grid-column:1/-1}
+.portfolio-preview-future{aspect-ratio:16/8;min-height:360px}
+.portfolio-preview-future img{object-fit:cover;object-position:center}
+.future-projects-content>p:not(.product-type):not(.future-projects-note){min-height:0;max-width:920px}
+.future-projects-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 34px;margin-top:26px}
+.future-projects-list h4{font-family:"Manrope",sans-serif;font-size:17px;font-weight:600;margin:0 0 7px;color:#171717}
+.future-projects-list p{font-size:12px;line-height:1.75;color:#5a5a5a;margin:0}
+.future-projects-note{min-height:0!important;margin-top:28px!important;font-weight:600;color:var(--amber)!important}
+@media(max-width:680px){
+  .portfolio-card-future{grid-column:auto}
+  .portfolio-preview-future{aspect-ratio:16/9;min-height:0}
+  .future-projects-list{grid-template-columns:1fr;gap:18px}
+}
