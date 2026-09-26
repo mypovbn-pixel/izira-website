@@ -30,8 +30,9 @@
 .portfolio-card-linked{transition:transform .22s ease,box-shadow .22s ease}
 .portfolio-card-linked:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,16,16,.08)}
 .portfolio-content{display:flex;flex-direction:column;align-items:flex-start}
-.product-logo{display:block;width:220px;height:84px;max-width:100%;object-fit:contain;object-position:left center;margin:2px 0 18px}
-.product-logo-kadai,.product-logo-mypov{width:220px;height:84px}
+.product-logo-frame{width:250px;height:92px;max-width:100%;overflow:hidden;margin:2px 0 18px;display:flex;align-items:center;justify-content:center}
+.product-logo{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(2.45);transform-origin:center}
+.product-logo-kadai,.product-logo-mypov{width:100%;height:100%}
 .portfolio-preview-kadai img{object-position:center}
 .portfolio-preview-mypov img{object-position:center}
 .portfolio-content>p:not(.product-type){min-height:92px}
@@ -61,7 +62,7 @@
 
 @media(max-width:680px){
   .portfolio-content>p:not(.product-type){min-height:0}
-  .product-logo{margin-bottom:13px}
+  .product-logo-frame{margin-bottom:13px}
   .contact-pattern{background-size:145px auto}
   .legal-header .site-nav{display:none}
   .legal-main{padding:54px 0 70px}
