@@ -24,3 +24,46 @@
 @media(max-width:680px){.container{width:min(calc(100% - 32px),var(--max))}.nav-wrap{height:70px}.izira-logo{width:130px}.menu-toggle{display:block}.site-nav{position:fixed;inset:0;background:#111;z-index:60;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:36px;gap:22px;font-family:"Manrope";font-size:25px;transform:translateX(100%);transition:.3s}.site-nav.open{transform:none}.nav-cta{font-size:14px}.hero{min-height:610px}.hero-inner{min-height:610px}.hero-copy{width:100%;padding-top:50px}.hero h1{font-size:44px}.hero-motif{width:420px;right:-160px;bottom:-50px;opacity:.7}.about{padding:58px 0}.about-image-wrap{height:260px}.about-image-wrap img{object-position:center center}.service-grid{grid-template-columns:1fr}.service-card,.service-card+.service-card{padding:24px 0;border-right:0;border-bottom:1px solid var(--stone);min-height:auto}.approach-steps{grid-template-columns:1fr}.step{border-right:0;border-top:1px solid #333;padding:22px 0}.portfolio{padding:58px 0}.portfolio-heading{display:block}.portfolio-cards{grid-template-columns:1fr}.contact-grid{align-items:flex-start;flex-direction:column}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.footer-connect{grid-column:1/-1}.footer-bottom{align-items:flex-end}.footer-bottom img{width:170px}}
 
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.reveal{opacity:1;transform:none;transition:none}}
+
+/* Portfolio refresh */
+.portfolio-card-link{display:flex;flex-direction:column;height:100%}
+.portfolio-card-linked{transition:transform .22s ease,box-shadow .22s ease}
+.portfolio-card-linked:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,16,16,.08)}
+.portfolio-content{display:flex;flex-direction:column;align-items:flex-start}
+.product-logo{display:block;max-width:150px;max-height:46px;object-fit:contain;object-position:left center;margin:0 0 15px}
+.product-logo-kadai{max-width:138px}
+.product-logo-mypov{max-width:120px}
+.portfolio-preview-kadai img{object-position:center}
+.portfolio-preview-mypov img{object-position:center}
+.portfolio-content>p:not(.product-type){min-height:92px}
+.status-live{color:#2f6b42}
+.product-link{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding-bottom:3px;border-bottom:1px solid var(--amber);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+/* Carry the contact motif across the entire CTA instead of ending part-way. */
+.contact-pattern{inset:0;width:100%;height:100%;background:url("assets/izira-motif.svg") center/170px auto repeat;opacity:.11}
+.contact-motif{z-index:1}
+.contact-grid{z-index:2}
+
+/* Legal pages */
+.legal-page{background:var(--ivory);min-height:100vh}
+.legal-header{background:#0d0d0d;color:#fff}
+.legal-header .nav-wrap{height:78px}
+.legal-header .site-nav{position:static;transform:none;background:transparent}
+.legal-main{padding:72px 0 88px}
+.legal-shell{max-width:820px}
+.legal-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:600;color:var(--amber);margin:0 0 14px}
+.legal-main h1{font-family:"Manrope",sans-serif;font-weight:500;font-size:clamp(38px,5vw,58px);letter-spacing:-.045em;line-height:1.04;margin:0 0 12px}
+.legal-updated{color:#777;font-size:12px;margin:0 0 42px}
+.legal-main h2{font-family:"Manrope",sans-serif;font-size:20px;font-weight:600;margin:34px 0 10px}
+.legal-main p,.legal-main li{font-size:13px;color:var(--graphite);line-height:1.8}
+.legal-main ul{padding-left:20px}
+.legal-back{display:inline-block;margin-bottom:30px;font-size:11px;border-bottom:1px solid var(--amber);padding-bottom:3px}
+.legal-footer{padding-top:34px}
+
+@media(max-width:680px){
+  .portfolio-content>p:not(.product-type){min-height:0}
+  .product-logo{margin-bottom:13px}
+  .contact-pattern{background-size:145px auto}
+  .legal-header .site-nav{display:none}
+  .legal-main{padding:54px 0 70px}
+}
