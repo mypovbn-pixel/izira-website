@@ -31,8 +31,8 @@
 .portfolio-card-linked:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,16,16,.08)}
 .portfolio-content{display:flex;flex-direction:column;align-items:flex-start}
 .product-logo{display:block;max-width:150px;max-height:46px;object-fit:contain;object-position:left center;margin:0 0 15px}
-.product-logo-kadai{max-width:138px}
-.product-logo-mypov{max-width:120px}
+.product-logo-kadai{max-width:207px;max-height:69px}
+.product-logo-mypov{max-width:180px;max-height:69px}
 .portfolio-preview-kadai img{object-position:center}
 .portfolio-preview-mypov img{object-position:center}
 .portfolio-content>p:not(.product-type){min-height:92px}
