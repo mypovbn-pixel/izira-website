@@ -30,9 +30,8 @@
 .portfolio-card-linked{transition:transform .22s ease,box-shadow .22s ease}
 .portfolio-card-linked:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,16,16,.08)}
 .portfolio-content{display:flex;flex-direction:column;align-items:flex-start}
-.product-logo{display:block;max-width:150px;max-height:46px;object-fit:contain;object-position:left center;margin:0 0 15px}
-.product-logo-kadai{max-width:207px;max-height:69px}
-.product-logo-mypov{max-width:180px;max-height:69px}
+.product-logo{display:block;width:220px;height:84px;max-width:100%;object-fit:contain;object-position:left center;margin:2px 0 18px}
+.product-logo-kadai,.product-logo-mypov{width:220px;height:84px}
 .portfolio-preview-kadai img{object-position:center}
 .portfolio-preview-mypov img{object-position:center}
 .portfolio-content>p:not(.product-type){min-height:92px}
@@ -73,8 +72,9 @@
 .portfolio-card-future{grid-column:1/-1}
 .portfolio-preview-future{aspect-ratio:16/8;min-height:360px}
 .portfolio-preview-future img{object-fit:cover;object-position:center}
-.future-projects-content>p:not(.product-type):not(.future-projects-note){min-height:0;max-width:920px}
-.future-projects-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 34px;margin-top:26px}
+.future-projects-content>.product-type{margin-bottom:12px}
+.future-projects-content>p:not(.product-type):not(.future-projects-note){min-height:0;max-width:920px;margin-top:0}
+.future-projects-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 34px;margin-top:20px}
 .future-projects-list h4{font-family:"Manrope",sans-serif;font-size:17px;font-weight:600;margin:0 0 7px;color:#171717}
 .future-projects-list p{font-size:12px;line-height:1.75;color:#5a5a5a;margin:0}
 .future-projects-note{min-height:0!important;margin-top:28px!important;font-weight:600;color:var(--amber)!important}
