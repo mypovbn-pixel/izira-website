@@ -116,7 +116,8 @@ Deno.serve(async (req: Request) => {
     const accessToken = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
     const configuredPhoneNumberId = Deno.env.get("IZIRA_WHATSAPP_PHONE_NUMBER_ID");
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const secretKeys = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
+    const serviceRoleKey = secretKeys.default || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!appSecret || !accessToken || !configuredPhoneNumberId || !supabaseUrl || !serviceRoleKey) {
       return json({ error: "WhatsApp router is not fully configured." }, 503);
