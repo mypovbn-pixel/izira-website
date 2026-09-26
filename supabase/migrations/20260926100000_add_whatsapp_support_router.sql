@@ -28,5 +28,15 @@ create index if not exists whatsapp_support_messages_phone_created_idx
 alter table public.whatsapp_support_conversations enable row level security;
 alter table public.whatsapp_support_messages enable row level security;
 
--- No anon/authenticated policies are intentionally created.
--- The Edge Function uses the service-role key and Meta webhook signature verification.
+-- This project was created after Supabase's Data API auto-exposure changes,
+-- so grant only the server-side service role the privileges this webhook needs.
+grant select, insert, update on table public.whatsapp_support_conversations to service_role;
+grant select, insert on table public.whatsapp_support_messages to service_role;
+grant usage, select on sequence public.whatsapp_support_messages_id_seq to service_role;
+
+revoke all on table public.whatsapp_support_conversations from anon, authenticated;
+revoke all on table public.whatsapp_support_messages from anon, authenticated;
+revoke all on sequence public.whatsapp_support_messages_id_seq from anon, authenticated;
+
+-- No anon/authenticated RLS policies are intentionally created.
+-- The Edge Function uses server-side credentials plus Meta webhook signature verification.
