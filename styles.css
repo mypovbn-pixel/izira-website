@@ -84,3 +84,59 @@
   .portfolio-preview-future{aspect-ratio:16/9;min-height:0}
   .future-projects-list{grid-template-columns:1fr;gap:18px}
 }
+
+
+/* Desktop-only portfolio layout correction */
+@media (min-width:901px){
+  .portfolio-cards{align-items:start}
+  .portfolio-card{align-self:start}
+  .portfolio-card-link{height:auto}
+
+  .portfolio-preview{
+    height:auto;
+    aspect-ratio:1.9/1;
+    background:#fff;
+  }
+  .portfolio-preview img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+  }
+
+  .portfolio-preview-kadai,
+  .portfolio-preview-mypov{
+    aspect-ratio:1.9/1;
+  }
+
+  .portfolio-content{
+    padding:20px 24px 22px;
+  }
+  .product-logo-frame{
+    height:64px;
+    margin:0 0 12px;
+  }
+  .portfolio-content>p:not(.product-type){
+    min-height:0;
+    margin-top:6px;
+    margin-bottom:10px;
+  }
+  .status{
+    margin-top:6px;
+  }
+  .product-link{
+    margin-top:8px;
+  }
+
+  .portfolio-preview-future{
+    aspect-ratio:1.882/1;
+    min-height:0;
+    background:#fff;
+  }
+  .portfolio-preview-future img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+  }
+}
